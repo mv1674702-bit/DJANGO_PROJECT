@@ -3,17 +3,22 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from .forms import RegisterForm, ItemForm
 from .models import Item
+from django.contrib.auth.models import User
 
 # Register
 def register_view(request):
-    form = RegisterForm(request.POST or None)
-    if form.is_valid():
-        user = form.save()
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        if User.objects.filter(username=username).exists():
+            return render(request, 'register.html', {'error': 'Username already exists'})
+
+        user = User.objects.create_user(username=username, password=password)
         login(request, user)
-
         return redirect('dashboard')
-    return render(request, 'register.html', {'form': form})
 
+    return render(request, 'register.html')
 # Dashboard
 @login_required
 def dashboard_view(request):

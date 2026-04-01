@@ -1,21 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
 </head>
 <body>
 
-<h1>My App</h1>
 <h2>Register</h2>
 
 <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    {{ form.errors }}
+
+    <!-- Username -->
+    <label>Username:</label><br>
+    <input type="text" name="username" required><br><br>
+
+    <!-- Password -->
+    <label>Password:</label><br>
+    <input type="password" name="password" required><br><br>
+
+    <!-- Error message -->
+    {% if error %}
+        <p style="color:red;">{{ error }}</p>
+    {% endif %}
+
     <button type="submit">Register</button>
 </form>
+
+<br>
 
 <p>Already have an account? 
     <a href="{% url 'login' %}">Login</a>
